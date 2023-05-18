@@ -6,10 +6,11 @@ library(plotly)
 library(DT)
 library(forcats)
 library(lubridate)
-library(ggtext)
+library(htmltools)
 
 source("./R/get_data.R")
 source("./R/get_box_data.R")
+source("./R/get_table_headers.R")
 source("./R/get_ssn_records.R")
 source("./R/get_streaks.R")
 source("./R/plot_ssn_pts.R")
@@ -142,6 +143,7 @@ server <- function(input, output, session) {
   output$ssn_records <- DT::renderDataTable(
     get_ssn_records(input$season),
     rownames = FALSE,
+    container = get_table_headers(),
     options = list(paging = TRUE,    ## paginate the output
                    pageLength = 10,  ## number of rows to output for each page
                    scrollX = TRUE,   ## enable scrolling on X axis
@@ -156,6 +158,7 @@ server <- function(input, output, session) {
     rownames = FALSE,
     options = list(
       pageLength = 5,
+      scrollX = TRUE,
       dom = 'tip',
       info = FALSE,
       paging = FALSE
@@ -167,11 +170,12 @@ server <- function(input, output, session) {
                           mutate(date = format(date, format = "%d %b %Y")),
                         options = list(paging = TRUE,    ## paginate the output
                                        pageLength = 10,  ## number of rows to output for each page
+                                       info = FALSE,
                                        scrollX = TRUE,   ## enable scrolling on X axis
                                        scrollY = TRUE,   ## enable scrolling on Y axis
                                        autoWidth = FALSE, ## use smart column width handling
                                        server = FALSE,   ## use client-side processing
-                                       dom = 'frtip',
+                                       # dom = 'frtip',
                                        columnDefs = list(list(targets = c(0, 2, 3, 6, 10, 11), className = 'dt-left'),
                                                          list(targets = c(1, 4, 5, 7, 8), className = 'dt-center'),
                                                          list(targets = c(9), className = 'dt-right'))
@@ -214,7 +218,6 @@ server <- function(input, output, session) {
   output$scorers_plot <- renderPlot(
     plot_ssn_scorers(input$season)
   )
-
 }
 
 # Run the application
