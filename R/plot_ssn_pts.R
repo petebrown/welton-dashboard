@@ -33,10 +33,18 @@ plot_ssn_pts <- function(seasons) {
     geom_line(aes(color = season)) +
     geom_point(aes(color = season)) +
     theme_bw() +
-    scale_color_brewer(palette="Greens") +
+    scale_color_brewer(
+      palette = "Greens",
+      name = ""
+    ) +
     labs(
       x = NULL,
       y = NULL
+    ) +
+    theme(
+      text = element_text(
+        family = "Helvetica Neue"
+      )
     )
 
   ggplotly(p, tooltip = "text") %>% layout(hoverlabel = list(align = "left"))

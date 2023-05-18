@@ -7,7 +7,7 @@ get_chart_options <- function() {
 }
 
 get_results_raw <- function() {
-  results <- read_csv("./results.csv", show_col_types = FALSE)
+  results <- read_csv("./data/results.csv", show_col_types = FALSE)
   return(results)
 }
 
@@ -21,6 +21,7 @@ get_results <- function() {
       opponent,
       venue,
       score,
+      outcome,
       scorers,
       competition,
       cup_round,
@@ -47,7 +48,7 @@ get_season_list <- function() {
 }
 
 get_scorers <- function() {
-  scorers <- read_csv("./scorers.csv", show_col_types = FALSE)
+  scorers <- read_csv("./data/scorers.csv", show_col_types = FALSE)
 
   return(scorers)
 }

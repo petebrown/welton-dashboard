@@ -1,0 +1,12 @@
+.skin-green .main-sidebar {
+  background-color: white;
+  font-family: "Helvetica Neue";
+}
+.skin-green section.content {
+  background-color: white;
+  font-family: "Helvetica Neue";
+}
+
+.skin-green section.content h1, h2, h3, h4, h5, h6 {
+  font-family: "Helvetica Neue";
+}

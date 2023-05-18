@@ -6,9 +6,11 @@ library(plotly)
 library(DT)
 library(forcats)
 library(lubridate)
+library(ggtext)
 
 source("./R/get_data.R")
 source("./R/get_box_data.R")
+source("./R/get_ssn_records.R")
 source("./R/get_streaks.R")
 source("./R/plot_ssn_pts.R")
 source("./R/plot_ssn_ppg.R")
@@ -31,6 +33,10 @@ ui <- dashboardPage(skin = "green",
   ),
 
   dashboardBody(
+    tags$head(
+      includeCSS(path = "www/style.css")
+    ),
+
     h1("Quick Facts"),
 
     fluidRow(
@@ -62,6 +68,11 @@ ui <- dashboardPage(skin = "green",
 
     hr(),
 
+    h1("League Records"),
+    DT::dataTableOutput("ssn_records"),
+
+    hr(),
+
     h1("Streaks"),
     DT::dataTableOutput("streaks_table"),
 
@@ -78,11 +89,11 @@ ui <- dashboardPage(skin = "green",
     # hr(),
 
     h1("Top Scorers"),
-    plotlyOutput("scorers_plot")
+    plotOutput("scorers_plot")
   )
 )
 
-# Define server logic required to draw a histogram
+# Define server logic requir`ed to draw a histogram
 server <- function(input, output, session) {
 
   output$win_pc <- renderValueBox({
@@ -126,6 +137,17 @@ server <- function(input, output, session) {
 
   output$ppg_plot <- renderPlotly(
     plot_ssn_ppg(input$season)
+  )
+
+  output$ssn_records <- DT::renderDataTable(
+    get_ssn_records(input$season),
+    rownames = FALSE,
+    options = list(
+      pageLength = 5,
+      dom = 'tip',
+      info = FALSE,
+      paging = FALSE
+    )
   )
 
   output$streaks_table <- DT::renderDataTable(
@@ -188,7 +210,7 @@ server <- function(input, output, session) {
     options = list()
   )
 
-  output$scorers_plot <- renderPlotly(
+  output$scorers_plot <- renderPlot(
     plot_ssn_scorers(input$season)
   )
 

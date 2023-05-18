@@ -37,10 +37,18 @@ plot_ssn_ppg <- function(seasons) {
       limits = c(0, 3),
       breaks = c(0, 1, 2, 3)
     ) +
-    scale_color_brewer(palette="Greens") +
+    scale_color_brewer(
+      palette = "Greens",
+      name = ""
+    ) +
     labs(
       x = NULL,
       y = NULL
+    ) +
+    theme(
+      text = element_text(
+        family = "Helvetica Neue"
+      )
     )
 
   ggplotly(p, tooltip = "text") %>% layout(hoverlabel = list(align = "left"))

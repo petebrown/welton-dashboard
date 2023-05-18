@@ -16,7 +16,10 @@ get_most_ssn_goals <- function(season) {
 }
 
 get_most_ssn_goals_name <- function(season) {
-  df <- get_most_ssn_goals(season)
+  df <- get_most_ssn_goals(season) %>%
+    arrange(
+      desc(total_goals)
+    )
 
   return (max(df$player_name[[1]]))
 }
