@@ -108,14 +108,14 @@ server <- function(input, output, session) {
 
   output$top_scorer <- renderValueBox({
     valueBox(
-      get_top_scorer_name(input$season), paste0("Top Scorer ", "(", get_top_scorer_goals(input$season), ")"), icon = icon("user", lib = "glyphicon"),
+      get_top_scorer_goals(input$season), paste0("Most goals in all selected seasons\n", "(", get_top_scorer_name(input$season), ")"), icon = icon("user", lib = "glyphicon"),
       color = "olive"
     )
   })
 
   output$biggest_win <- renderValueBox({
     valueBox(
-      paste(get_biggest_win_score(input$season), "v", get_biggest_win_opponent(input$season)), "Biggest win", icon = icon("futbol", lib = "glyphicon"),
+      get_biggest_win_score(input$season), paste0("Biggest win (v ", get_biggest_win_opponent(input$season), ")"), icon = icon("futbol", lib = "glyphicon"),
       color = "green"
     )
   })
