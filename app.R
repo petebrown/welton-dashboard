@@ -1,13 +1,4 @@
-library(shiny)
-library(shinydashboard)
-library(readr)
-library(dplyr, warn.conflicts = FALSE)
-library(plotly)
-library(DT)
-library(forcats)
-library(lubridate)
-library(htmltools)
-
+source("./R/a_packages.R")
 source("./R/get_data.R")
 source("./R/get_box_data.R")
 source("./R/get_table_headers.R")
@@ -43,17 +34,14 @@ ui <- dashboardPage(skin = "green",
     fluidRow(
       valueBoxOutput("win_pc"),
 
-      # Dynamic valueBoxes
       valueBoxOutput("most_goals"),
 
       valueBoxOutput("winning_streak")
     ),
 
     fluidRow(
-      # A static valueBox
       valueBoxOutput("top_scorer"),
 
-      # Dynamic valueBoxes
       valueBoxOutput("biggest_win"),
 
       valueBoxOutput("approvalBox2")
@@ -120,7 +108,7 @@ server <- function(input, output, session) {
 
   output$top_scorer <- renderValueBox({
     valueBox(
-      list(get_top_scorer(input$season)), "Top Scorer", icon = icon("user", lib = "glyphicon"),
+      get_top_scorer_name(input$season), paste0("Top Scorer ", "(", get_top_scorer_goals(input$season), ")"), icon = icon("user", lib = "glyphicon"),
       color = "olive"
     )
   })
@@ -175,7 +163,7 @@ server <- function(input, output, session) {
                                        scrollY = TRUE,   ## enable scrolling on Y axis
                                        autoWidth = FALSE, ## use smart column width handling
                                        server = FALSE,   ## use client-side processing
-                                       # dom = 'frtip',
+                                       dom = 'frtip',
                                        columnDefs = list(list(targets = c(0, 2, 3, 6, 10, 11), className = 'dt-left'),
                                                          list(targets = c(1, 4, 5, 7, 8), className = 'dt-center'),
                                                          list(targets = c(9), className = 'dt-right'))

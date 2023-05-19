@@ -17,11 +17,16 @@ get_most_ssn_goals <- function(season) {
 
 get_most_ssn_goals_name <- function(season) {
   df <- get_most_ssn_goals(season) %>%
+    filter(
+      total_goals == max(total_goals)
+    ) %>%
     arrange(
-      desc(total_goals)
+      desc(player_name)
     )
 
-  return (max(df$player_name[[1]]))
+  top_scorers <- paste0(df$player_name, collapse = ", ")
+
+  return(top_scorers)
 }
 
 get_most_ssn_goals_number <- function(season) {
@@ -30,11 +35,27 @@ get_most_ssn_goals_number <- function(season) {
   return (max(df$total_goals))
 }
 
-get_top_scorer <- function(season) {
+get_top_scorer_name <- function(season) {
   df <- get_ssn_scorers(season) %>%
+    group_by(player_name) %>%
+    summarise(
+      total_goals = sum(total_goals)
+    ) %>%
     filter(total_goals == max(total_goals))
 
-  return (df$player_name)
+  top_scorers <- paste0(df$player_name, collapse = ", ")
+
+  return (top_scorers)
+}
+
+get_top_scorer_goals <- function(season) {
+  df <- get_ssn_scorers(season) %>%
+    group_by(player_name) %>%
+    summarise(
+      total_goals = sum(total_goals)
+    )
+
+  return (max(df$total_goals))
 }
 
 get_winning_streak <- function(season) {

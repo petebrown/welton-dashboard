@@ -57,7 +57,7 @@ filter_scorers <- function(seasons) {
   scorers <- get_scorers()
   results <- filter_results(seasons)
   df <- scorers %>%
-    inner_join(results, by = "date")
+    right_join(results, by = "date", relationship = "many-to-many")
   return(df)
 }
 

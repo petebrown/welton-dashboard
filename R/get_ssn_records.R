@@ -62,5 +62,3 @@ get_ssn_records <- function(seasons) {
 
   return (seasons_df)
 }
-
-get_ssn_records("2022/23")

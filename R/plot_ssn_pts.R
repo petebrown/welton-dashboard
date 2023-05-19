@@ -49,5 +49,3 @@ plot_ssn_pts <- function(seasons) {
 
   ggplotly(p, tooltip = "text") %>% layout(hoverlabel = list(align = "left"))
 }
-
-plot_ssn_pts("2022/23")
