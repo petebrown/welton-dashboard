@@ -115,7 +115,7 @@ server <- function(input, output, session) {
 
   output$biggest_win <- renderValueBox({
     valueBox(
-      get_biggest_win_score(input$season), paste0("Biggest win (v ", get_biggest_win_opponent(input$season), ")"), icon = icon("futbol", lib = "glyphicon"),
+      get_biggest_win_score(input$season), stringr::str_glue("Biggest win (v {get_biggest_win_opponent(input$season)})"), icon = icon("futbol", lib = "glyphicon"),
       color = "green"
     )
   })
