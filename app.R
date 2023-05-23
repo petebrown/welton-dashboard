@@ -58,8 +58,17 @@ ui <- dashboardPage(skin = "green",
     hr(),
 
     h1("League Records"),
-    DT::dataTableOutput("ssn_records"),
+    
+    DT::dataTableOutput("ssn_records_all"),
 
+    br(),
+    h3("Home"),
+    DT::dataTableOutput("ssn_records_home"),
+    
+    br(),
+    h3("Away"),
+    DT::dataTableOutput("ssn_records_away"),
+    
     hr(),
 
     h1("Streaks"),
@@ -78,7 +87,7 @@ ui <- dashboardPage(skin = "green",
     # hr(),
 
     h1("Top Scorers"),
-    plotOutput("scorers_plot")
+    plotlyOutput("scorers_plot")
   )
 )
 
@@ -127,18 +136,44 @@ server <- function(input, output, session) {
   output$ppg_plot <- renderPlotly(
     plot_ssn_ppg(input$season)
   )
-
-  output$ssn_records <- DT::renderDataTable(
+  
+  output$ssn_records_all <- DT::renderDataTable(
     get_ssn_records(input$season),
     rownames = FALSE,
-    container = get_table_headers(),
-    options = list(paging = TRUE,    ## paginate the output
+    # container = get_table_headers(),
+    options = list(paging = FALSE,    ## paginate the output
                    pageLength = 10,  ## number of rows to output for each page
                    scrollX = TRUE,   ## enable scrolling on X axis
                    scrollY = TRUE,   ## enable scrolling on Y axis
                    autoWidth = FALSE, ## use smart column width handling
                    server = FALSE,   ## use client-side processing
-                   dom = 'frtip')
+                   dom = 'rtp')
+  )
+  
+  output$ssn_records_home <- DT::renderDataTable(
+    get_ssn_records(input$season, "H"),
+    rownames = FALSE,
+    # container = get_table_headers(),
+    options = list(paging = FALSE,    ## paginate the output
+                   pageLength = 10,  ## number of rows to output for each page
+                   scrollX = TRUE,   ## enable scrolling on X axis
+                   scrollY = TRUE,   ## enable scrolling on Y axis
+                   autoWidth = FALSE, ## use smart column width handling
+                   server = FALSE,   ## use client-side processing
+                   dom = 'rtp')
+  )
+  
+  output$ssn_records_away <- DT::renderDataTable(
+    get_ssn_records(input$season, "A"),
+    rownames = FALSE,
+    # container = get_table_headers(),
+    options = list(paging = FALSE,    ## paginate the output
+                   pageLength = 10,  ## number of rows to output for each page
+                   scrollX = TRUE,   ## enable scrolling on X axis
+                   scrollY = TRUE,   ## enable scrolling on Y axis
+                   autoWidth = FALSE, ## use smart column width handling
+                   server = FALSE,   ## use client-side processing
+                   dom = 'rtp')
   )
 
   output$streaks_table <- DT::renderDataTable(
@@ -154,18 +189,17 @@ server <- function(input, output, session) {
   )
 
   output_ssn_results <- function(season) {
-    DT::renderDataTable(filter_results(season) %>%
-                          mutate(date = format(date, format = "%d %b %Y")),
+    DT::renderDataTable(filter_results(season) %>% mutate(date = format(date, format = "%d %b %Y")),
                         options = list(paging = TRUE,    ## paginate the output
                                        pageLength = 10,  ## number of rows to output for each page
-                                       info = FALSE,
+                                       info = TRUE,
                                        scrollX = TRUE,   ## enable scrolling on X axis
                                        scrollY = TRUE,   ## enable scrolling on Y axis
                                        autoWidth = FALSE, ## use smart column width handling
                                        server = FALSE,   ## use client-side processing
                                        dom = 'frtip',
-                                       columnDefs = list(list(targets = c(0, 2, 3, 6, 10, 11), className = 'dt-left'),
-                                                         list(targets = c(1, 4, 5, 7, 8), className = 'dt-center'),
+                                       columnDefs = list(list(targets = c(0, 2, 3, 6, 7, 8, 10, 11), className = 'dt-left'),
+                                                         list(targets = c(1, 4, 5), className = 'dt-center'),
                                                          list(targets = c(9), className = 'dt-right'))
                         ),
                         extensions = 'Buttons',
@@ -197,13 +231,7 @@ server <- function(input, output, session) {
     }
   })
 
-  output$results_table <- DT::renderDataTable(
-    filter_results(input$season),
-    rownames= FALSE,
-    options = list()
-  )
-
-  output$scorers_plot <- renderPlot(
+  output$scorers_plot <- renderPlotly(
     plot_ssn_scorers(input$season)
   )
 }

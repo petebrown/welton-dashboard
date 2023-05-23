@@ -20,8 +20,8 @@ plot_ssn_scorers <- function(seasons) {
     ) +
   geom_text(aes(x = ordered, y = total_goals, label = total_goals),
             color = "white",
-            hjust = 1,
-            nudge_y = -0.2) +
+            hjust = "left",
+            nudge_y = -0.275) +
   labs(
     x = NULL,
     y = NULL
@@ -42,7 +42,7 @@ plot_ssn_scorers <- function(seasons) {
   scale_y_continuous(
     expand = expansion(mult = c(0, 0), add = c(0, 0))
    ) +
-  theme_classic(base_size = 15) +
+  theme_classic() +
   theme(
     legend.position = "none",
     text = element_text(
@@ -61,9 +61,9 @@ plot_ssn_scorers <- function(seasons) {
     axis.text.x = element_blank(),
     axis.line.x = element_blank(),
     axis.ticks = element_blank(),
-    panel.spacing = unit(1.5, "lines")
+    panel.spacing = unit(1.0, "lines")
   ) +
   coord_flip()
 
-  p
+  ggplotly(p, tooltip = "text")
 }
