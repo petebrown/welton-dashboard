@@ -22,10 +22,13 @@ get_most_ssn_goals_name <- function(season) {
     ) %>%
     arrange(
       desc(player_name)
+    ) %>%
+    mutate(
+      player_and_season = stringr::str_glue("{player_name} ({season})")
     )
-
-  top_scorers <- paste0(df$player_name, collapse = ", ")
-
+  
+  top_scorers <- paste0(df$player_and_season, collapse = ", ")
+  
   return(top_scorers)
 }
 
@@ -64,11 +67,22 @@ get_winning_streak <- function(season) {
   return(max(df$Wins))
 }
 
+get_winning_streak_ssns <- function(season) {
+  df <- get_streaks(season) %>%
+    filter(
+      Wins == max(Wins)
+    )
+  
+  win_streak_ssns <- paste0(df$Season, collapse = ", ")
+  
+  return(win_streak_ssns)
+}
+
 get_biggest_win <- function(seasons) {
   df <- get_results_raw() %>%
     filter(season %in% seasons) %>%
     mutate(gd = goals_for - goals_against) %>%
-    arrange(desc(gd), desc(goals_for))
+    arrange(desc(gd), desc(goals_for), date)
 
   return(df)
 }
@@ -80,7 +94,12 @@ get_biggest_win_score <- function(seasons) {
 }
 
 get_biggest_win_opponent <- function(seasons) {
-  df <- get_biggest_win(seasons)
-
-  return(df$opponent[[1]])
+  df <- get_biggest_win(seasons) %>%
+    mutate(
+      oppo_and_ssn = stringr::str_glue("{opponent} ({venue}), {season}")
+    )
+  
+  biggest_win_oppo <- df$oppo_and_ssn[[1]]
+  
+  return(biggest_win_oppo)
 }

@@ -91,40 +91,87 @@ ui <- dashboardPage(skin = "green",
   )
 )
 
-# Define server logic requir`ed to draw a histogram
+
 server <- function(input, output, session) {
 
   output$win_pc <- renderValueBox({
     valueBox(
-      paste0(get_win_pc(input$season), "%"), "Games won", icon = icon("futbol"),
+      HTML(stringr::str_glue("<center>{get_win_pc(input$season)}%</center>")),
+      HTML(stringr::str_glue(
+        "<center>
+             <b>Games won</b><br/>
+             All selected seasons
+         </center>"
+        )),
+      icon = icon("futbol"),
       color = "green"
     )
   })
 
   output$most_goals <- renderValueBox({
     valueBox(
-      get_most_ssn_goals_number(input$season), paste0("Most goals in a season", " (", get_most_ssn_goals_name(input$season), ")"), icon = icon("futbol"),
+      HTML(stringr::str_glue("<center>
+              <b>
+                {get_most_ssn_goals_number(input$season)}
+              </b>
+           </center>")),
+      HTML(stringr::str_glue("<center>
+              <b>Most goals in a season</b><br/>
+              
+              {get_most_ssn_goals_name(input$season)}
+            </center>")),
+      icon = icon("futbol"),
       color = "olive"
     )
   })
 
   output$winning_streak <- renderValueBox({
     valueBox(
-      get_winning_streak(input$season), "Most consecutive wins", icon = icon("thumbs-up", lib = "glyphicon"),
+      HTML(stringr::str_glue("<center>
+              <b>
+                {get_winning_streak(input$season)}
+              </b>
+            </center>")),
+      HTML(stringr::str_glue("<center>
+             <b>Most consecutive wins</b><br/>
+             
+             {get_winning_streak_ssns(input$season)}
+           </center>")),
+      icon = icon("thumbs-up", lib = "glyphicon"),
       color = "green"
     )
   })
 
   output$top_scorer <- renderValueBox({
     valueBox(
-      get_top_scorer_goals(input$season), paste0("Most goals in all selected seasons\n", "(", get_top_scorer_name(input$season), ")"), icon = icon("user", lib = "glyphicon"),
+      HTML(stringr::str_glue("<center>
+              <b>
+                {get_top_scorer_goals(input$season)}
+              </b>
+            </center>")),
+      HTML(stringr::str_glue("<center>
+             <b>Top goalscorer</b><br/>
+             
+             {get_top_scorer_name(input$season)}
+           </center>")),
+      icon = icon("user", lib = "glyphicon"),
       color = "olive"
     )
   })
 
   output$biggest_win <- renderValueBox({
     valueBox(
-      get_biggest_win_score(input$season), stringr::str_glue("Biggest win (v {get_biggest_win_opponent(input$season)})"), icon = icon("futbol", lib = "glyphicon"),
+      HTML(stringr::str_glue("<center>
+              <b>
+                {get_biggest_win_score(input$season)}
+              </b>
+            </center>")),
+      HTML(stringr::str_glue("<center>
+             <b>Biggest win</b><br/>
+             
+             v {get_biggest_win_opponent(input$season)}
+           </center>")),
+      icon = icon("futbol", lib = "glyphicon"),
       color = "green"
     )
   })
