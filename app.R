@@ -1,11 +1,12 @@
 source("./R/a_packages.R")
-source("./R/get_data.R")
+source("./R/fill_value_box.R")
 source("./R/get_box_data.R")
-source("./R/get_table_headers.R")
+source("./R/get_data.R")
 source("./R/get_ssn_records.R")
 source("./R/get_streaks.R")
-source("./R/plot_ssn_pts.R")
+source("./R/get_table_headers.R")
 source("./R/plot_ssn_ppg.R")
+source("./R/plot_ssn_pts.R")
 source("./R/plot_ssn_scorers.R")
 
 # Define UI for application that draws a histogram
@@ -96,13 +97,8 @@ server <- function(input, output, session) {
 
   output$win_pc <- renderValueBox({
     valueBox(
-      HTML(stringr::str_glue("<center>{get_win_pc(input$season)}%</center>")),
-      HTML(stringr::str_glue(
-        "<center>
-             <b>Games won</b><br/>
-             All selected seasons
-         </center>"
-        )),
+      fill_value_box("win_pc", input$season)[[1]],
+      fill_value_box("win_pc", input$season)[[2]],
       icon = icon("futbol"),
       color = "green"
     )
@@ -110,16 +106,18 @@ server <- function(input, output, session) {
 
   output$most_goals <- renderValueBox({
     valueBox(
-      HTML(stringr::str_glue("<center>
-              <b>
-                {get_most_ssn_goals_number(input$season)}
-              </b>
-           </center>")),
-      HTML(stringr::str_glue("<center>
-              <b>Most goals in a season</b><br/>
-              
-              {get_most_ssn_goals_name(input$season)}
-            </center>")),
+      fill_value_box("most_goals", input$season)[[1]],
+      fill_value_box("most_goals", input$season)[[2]],
+      # HTML(stringr::str_glue("<center>
+      #         <b>
+      #           {get_most_ssn_goals_number(input$season)}
+      #         </b>
+      #      </center>")),
+      # HTML(stringr::str_glue("<center>
+      #         <b>Most goals in a season</b><br/>
+      #         
+      #         {get_most_ssn_goals_name(input$season)}
+      #       </center>")),
       icon = icon("futbol"),
       color = "olive"
     )
