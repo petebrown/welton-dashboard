@@ -15,19 +15,26 @@ get_most_ssn_goals <- function(season) {
   return (df)
 }
 
-get_most_ssn_goals_name <- function(season) {
-  df <- get_most_ssn_goals(season) %>%
+get_most_ssn_goals_name <- function(seasons) {
+  df <- get_most_ssn_goals(seasons) %>%
     filter(
       total_goals == max(total_goals)
     ) %>%
     arrange(
-      desc(player_name)
+      season, player_name
     ) %>%
     mutate(
-      player_and_season = stringr::str_glue("{player_name} ({season})")
+      player_and_season = case_when(
+        length(seasons) > 1 ~ stringr::str_glue("{player_name} ({season})"),
+        TRUE ~ player_name
+      )
     )
   
-  top_scorers <- paste0(df$player_and_season, collapse = ", ")
+  if (length(seasons) > 1) {
+    top_scorers <- paste0(df$player_and_season, collapse = ", ")
+  } else {
+    top_scorers <- paste0(df$player_name, collapse = ", ")
+  }
   
   return(top_scorers)
 }
@@ -71,7 +78,8 @@ get_winning_streak_ssns <- function(season) {
   df <- get_streaks(season) %>%
     filter(
       Wins == max(Wins)
-    )
+    ) %>%
+    arrange(Season)
   
   win_streak_ssns <- paste0(df$Season, collapse = ", ")
   
@@ -103,3 +111,20 @@ get_biggest_win_opponent <- function(seasons) {
   
   return(biggest_win_oppo)
 }
+
+get_av_league_pts <- function(seasons) {
+  df <- get_results_raw() %>%
+    group_by(season) %>%
+    filter(
+      season %in% seasons,
+      game_type == "league",
+      comp_game_no == max(comp_game_no)
+    ) %>%
+    ungroup()
+  
+  av_pts <- round(mean(df$ssn_pts), 1)
+  
+  return(av_pts)
+}
+
+get_av_league_pts(c("2022/23", "2021/22"))

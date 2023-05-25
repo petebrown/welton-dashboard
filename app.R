@@ -45,8 +45,10 @@ ui <- dashboardPage(skin = "green",
 
       valueBoxOutput("biggest_win"),
 
-      valueBoxOutput("approvalBox2")
+      valueBoxOutput("av_league_pts")
     ),
+    
+    hr(),
 
     h1("Point Accumulation"),
     plotlyOutput("pts_plot"),
@@ -82,13 +84,10 @@ ui <- dashboardPage(skin = "green",
 
     hr(),
 
-    # h1("All Results"),
-    # DT::dataTableOutput("results_table"),
-    #
-    # hr(),
-
     h1("Top Scorers"),
-    plotlyOutput("scorers_plot")
+    plotlyOutput("scorers_plot"),
+    
+    hr()
   )
 )
 
@@ -108,16 +107,6 @@ server <- function(input, output, session) {
     valueBox(
       fill_value_box("most_goals", input$season)[[1]],
       fill_value_box("most_goals", input$season)[[2]],
-      # HTML(stringr::str_glue("<center>
-      #         <b>
-      #           {get_most_ssn_goals_number(input$season)}
-      #         </b>
-      #      </center>")),
-      # HTML(stringr::str_glue("<center>
-      #         <b>Most goals in a season</b><br/>
-      #         
-      #         {get_most_ssn_goals_name(input$season)}
-      #       </center>")),
       icon = icon("futbol"),
       color = "olive"
     )
@@ -125,16 +114,8 @@ server <- function(input, output, session) {
 
   output$winning_streak <- renderValueBox({
     valueBox(
-      HTML(stringr::str_glue("<center>
-              <b>
-                {get_winning_streak(input$season)}
-              </b>
-            </center>")),
-      HTML(stringr::str_glue("<center>
-             <b>Most consecutive wins</b><br/>
-             
-             {get_winning_streak_ssns(input$season)}
-           </center>")),
+      fill_value_box("winning_streak", input$season)[[1]],
+      fill_value_box("winning_streak", input$season)[[2]],
       icon = icon("thumbs-up", lib = "glyphicon"),
       color = "green"
     )
@@ -142,16 +123,8 @@ server <- function(input, output, session) {
 
   output$top_scorer <- renderValueBox({
     valueBox(
-      HTML(stringr::str_glue("<center>
-              <b>
-                {get_top_scorer_goals(input$season)}
-              </b>
-            </center>")),
-      HTML(stringr::str_glue("<center>
-             <b>Top goalscorer</b><br/>
-             
-             {get_top_scorer_name(input$season)}
-           </center>")),
+      fill_value_box("top_scorer", input$season)[[1]],
+      fill_value_box("top_scorer", input$season)[[2]],
       icon = icon("user", lib = "glyphicon"),
       color = "olive"
     )
@@ -159,18 +132,19 @@ server <- function(input, output, session) {
 
   output$biggest_win <- renderValueBox({
     valueBox(
-      HTML(stringr::str_glue("<center>
-              <b>
-                {get_biggest_win_score(input$season)}
-              </b>
-            </center>")),
-      HTML(stringr::str_glue("<center>
-             <b>Biggest win</b><br/>
-             
-             v {get_biggest_win_opponent(input$season)}
-           </center>")),
+      fill_value_box("biggest_win", input$season)[[1]],
+      fill_value_box("biggest_win", input$season)[[2]],
       icon = icon("futbol", lib = "glyphicon"),
       color = "green"
+    )
+  })
+  
+  output$av_league_pts <- renderValueBox({
+    valueBox(
+      fill_value_box("av_league_pts", input$season)[[1]],
+      fill_value_box("av_league_pts", input$season)[[2]],
+      icon = icon("futbol", lib = "glyphicon"),
+      color = "olive"
     )
   })
 
